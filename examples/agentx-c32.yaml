@@ -1,0 +1,16 @@
+# A sample workload: copy it, or pass `--workload agentx-c32`. Workload flags override its fields; `--target` projects at others.
+name: agentx-c32
+source: AgentX agentic-coding trace replay (InferenceX), streaming chat completions
+concurrency: 32          # client concurrency
+active_decodes: null    # requests decoding at once: N or [lo, hi]; null takes the profile's p10-p90
+isl: 105314              # mean input length, tokens
+osl: 472                 # mean output length, tokens
+metric: output_tok_s_gpu # what the plan ranks rows by
+requirements:            # not_worse: no lower than now; a number: a bound (minimum, or maximum for *_s)
+  # B300 vLLM, TP4, same workload: InferenceX run 447886 (2026-11-10)
+  output_tok_s_gpu: 383.4
+  # InferenceX lists p50/p90 interactivity 598.8/469.5, which its 383.4 tok/s/GPU at 32 clients on 4 GPUs
+  # (about 48 tok/s a user) cannot give: check the run's numbers before making them bounds.
+  p50_interactivity: not_worse
+  p90_interactivity: not_worse
+  p90_ttft_s: 2.39

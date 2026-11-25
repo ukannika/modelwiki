@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ModelWiki plan rows",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "stage",
+      "feature",
+      "status",
+      "evidence",
+      "kernels",
+      "buckets",
+      "change",
+      "depends_on"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Map ID (m-...) or Serving row ID (s-<subsection>-<feature>)"
+      },
+      "stage": {
+        "enum": [
+          "features",
+          "serving"
+        ]
+      },
+      "page_index": {
+        "type": "integer"
+      },
+      "section": {
+        "type": "string"
+      },
+      "subsection": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "feature": {
+        "type": "string"
+      },
+      "want": {
+        "type": "string"
+      },
+      "technique": {
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "on",
+          "off-by-config",
+          "unwired",
+          "port",
+          "write",
+          "partial",
+          "n/a"
+        ]
+      },
+      "evidence": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^.+:[0-9]+(-[0-9]+)?$"
+        },
+        "description": "path:line or path:first-last, relative to the tree, at the plan's commit"
+      },
+      "kernels": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Regexes for the row's kernels; an on row's must all be in the trace"
+      },
+      "buckets": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "weight": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "share": {
+            "type": "number"
+          },
+          "basis": {
+            "type": "string"
+          }
+        },
+        "description": "Share of step time when no bucket measures the row (an overlay)"
+      },
+      "change": {
+        "type": "object",
+        "description": "How the row changes the step; the CLI computes the time it removes",
+        "properties": {
+          "kind": {
+            "enum": [
+              "optimize",
+              "fuse",
+              "remove_work",
+              "overlap",
+              "host",
+              "estimate",
+              null
+            ]
+          },
+          "fraction": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Required for remove_work, overlap, host and estimate"
+          },
+          "basis": {
+            "enum": [
+              "reference",
+              "budget",
+              "estimate",
+              null
+            ],
+            "description": "For estimate"
+          },
+          "kernels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Regexes narrowing the row's buckets to the kernels it changes"
+          },
+          "scope": {
+            "type": "string",
+            "description": "A scope regex narrowing the matched kernels"
+          },
+          "step_kinds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Step kinds the row touches (default all)"
+          },
+          "why": {
+            "type": "string"
+          }
+        }
+      },
+      "depends_on": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "launch_blocker": {
+        "type": "boolean"
+      },
+      "config": {
+        "type": "object",
+        "description": "Flags or environment the row sets"
+      },
+      "notes": {
+        "type": "string"
+      }
+    }
+  }
+}

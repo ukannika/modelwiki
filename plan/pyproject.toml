@@ -1,0 +1,16 @@
+[project]
+name = "modelwiki"
+version = "0.1.0"
+description = "Model pages and per-tree optimization plans projected from a ruppell profile and a workload"
+requires-python = ">=3.10"
+dependencies = ["pyyaml>=6", "numpy>=1.24"]
+
+[project.scripts]
+modelwiki = "modelwiki.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["modelwiki"]
